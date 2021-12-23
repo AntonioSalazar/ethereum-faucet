@@ -16,6 +16,8 @@ const App  = () => {
   const [account, setAccount] = useState(null);
   const [balance, setBalance] = useState(null);
   const [shouldReload, setShouldReload] = useState(false);
+
+  const canConnectToContract = account && web3Api.contract;
   const reloadEffect = useCallback(() => setShouldReload(!shouldReload), [shouldReload]);
 
 
@@ -50,6 +52,9 @@ const App  = () => {
       setAccount(accounts[0])
       window.ethereum.on('accountsChanged', (accounts) => {
         setAccount(accounts[0])
+      })
+      window.ethereum.on('chainChanged', () => {
+        window.location.reload()
       })
     }
     web3Api.web3 && getAccount()
@@ -121,13 +126,18 @@ const App  = () => {
           <div className="balance-view is-size-2 mb-5">
             Current Balance <strong>{balance}</strong> ETH
           </div>
+          {
+            !canConnectToContract && (
+              <i className='is-block'>Connect to Ganache</i>
+            )
+          }
           <button 
-            disabled={!account}
+            disabled={!canConnectToContract}
             className="button is-primary mr-2"
             onClick={addFunds}
           >Donate 1 ETH</button>
           <button 
-            disabled={!account}
+            disabled={!canConnectToContract}
             className="button is-danger"
             onClick={withDrawFunds}
           >Withdraw</button>
