@@ -140,7 +140,7 @@ const App  = () => {
             disabled={!canConnectToContract}
             className="button is-danger"
             onClick={withDrawFunds}
-          >Withdraw</button>
+          >Withdraw 0.1 ETH</button>
         </div>
       </div>
     </>
